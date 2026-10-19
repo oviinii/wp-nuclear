@@ -1,0 +1,42 @@
+{
+  "root_high": ["mrkt.php", "ex.php", "wp-card.php", "admin-clor.php", "cache-cleaner.php", "amp.php"],
+  "root_warn": ["default.php"],
+  "root_ignore": ["index.php", "wp-config.php", "wp-config-sample.php", "robots.txt", "readme.html", "license.txt", "error_log", ".htaccess", ".htaccess.bk", "xmlrpc.php", "wp-activate.php", "wp-blog-header.php", "wp-comments-post.php", "wp-cron.php", "wp-links-opml.php", "wp-load.php", "wp-login.php", "wp-mail.php", "wp-settings.php", "wp-signup.php", "wp-trackback.php", "wp-admin", "wp-content", "wp-includes", ".private", ".tmb"],
+  "high_regexes": {
+    "^sitemap[0-9]+\\.xml$": "sitemap numerado gerado por kit de invasao (WP real usa sitemap_index.xml)",
+    "^\\.nox_.*\\.meta$": "metadado do toolkit NOX-CLOAK",
+    "^\\.user\\.ini$": "config PHP-FPM (pode conter auto_prepend_file malicioso)",
+    "^\\.wp-config$": "diretorio stash do toolkit NOX-CLOAK"
+  },
+  "review_regexes": {
+    "^google[a-z0-9]+\\.html$": "arquivo de verificacao Search Console (revisar autoria)",
+    "^BingSiteAuth\\.xml$": "arquivo de verificacao Bing (revisar autoria)",
+    "^[a-f0-9]{32}\\.txt$": "chave IndexNow (revisar autoria)",
+    "^index\\.html$": "index.html estatico na raiz de um WordPress (revisar tamanho/origem)"
+  },
+  "php_regexes": [
+    {"re": "eval\\s*\\(\\s*(base64_decode|gzinflate|str_rot13|assert)\\s*\\(", "sev": "high", "msg": "eval com decodificacao ofuscada"},
+    {"re": "eval\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)", "sev": "high", "msg": "eval dinamico via request"},
+    {"re": "(shell_exec|system|passthru|exec)\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)", "sev": "high", "msg": "execucao de comando com input do request"},
+    {"re": "filesman|c99shell|r57shell|b374k|wso\\(", "sev": "high", "msg": "assinatura de webshell conhecido"},
+    {"re": "KGS_CLOAKER|KGS_BOT_RULE|KGS_TOKEN", "sev": "high", "msg": "assinatura do toolkit KGS (incidente 2026-10)"},
+    {"re": "NOX-CLOAK|nox-engine|nox-wordpress|NoxCloak|NOX SHELL", "sev": "high", "msg": "assinatura do toolkit NOX (incidente 2026-09)"},
+    {"re": "TERONG|DORAHOKI|terong123|dorahoki", "sev": "high", "msg": "conteudo de spam slot indonesio"},
+    {"re": "wp_create_user\\s*\\(\\s*['\"]admin_\\{", "sev": "high", "msg": "criacao admin fantasma tipica de backdoor"},
+    {"re": "auto_prepend_file", "sev": "high", "msg": "auto_prepend_file (injecao em TODAS as requisicoes PHP)"}
+  ],
+  "htaccess_regexes": [
+    {"re": "KGS_BOT_RULE|NOX-CLOAK-RULE", "sev": "high", "msg": "bloco de cloaking para bots em .htaccess"}
+  ],
+  "dir_review_regexes": {
+    "^[a-z]{6,12}[a-z-]{4,12}\\z?[a-z]+$": "nome de diretorio com silabas aleatorias (estilo plugin-fantasma)"
+  },
+  "mu_allow_prefixes": ["hostinger-", "index.php"],
+  "wpconfig_warn": [
+    {"re": "WP_AUTO_UPDATE_CORE'\\s*,\\s*'false\\s*'\\s*;|WP_AUTO_UPDATE_CORE'\\s*,\\s*false\\s*;", "msg": "auto-update do core desabilitado (padrao injetado por kit de invasao; confirme se foi voce)"}
+  ],
+  "index_original_name": "index_original.php",
+  "stock_index_hash_len": "{len=405}",
+  "database_ghost_logins": ["^crt_", "^admin_[a-z0-9]{6,8}$", "wplogin"],
+  "database_ghost_dates": ["2026-09-01", "2026-10-31"]
+}

@@ -1,0 +1,9 @@
+# dados de execução e evidências — nunca versionar
+report_*.json
+report_*.html
+reports/
+wpn_backups/
+
+__pycache__/
+*.pyc
+.DS_Store
